@@ -1,0 +1,18 @@
+ /* Estilos personalizados con el color #057050 */
+        .bg-custom {
+            background-color: #057050 !important;
+            color: #ffffff !important;
+        }
+        .btn-custom {
+            background-color: #057050;
+            border-color: #057050;
+            color: #ffffff;
+        }
+        .btn-custom:hover, .btn-custom:focus, .btn-custom:active {
+            background-color: #045a40;
+            border-color: #045a40;
+            color: #ffffff;
+        }
+        .text-custom {
+            color: #057050 !important;
+        }

@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Control de Taller</title>
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="colores.css">
+</head>
+<body class="bg-light">
+
+    <!-- Barra de navegación -->
+    <nav class="navbar navbar-dark bg-dark mb-4 shadow-sm">
+        <div class="container">
+            <span class="navbar-brand mb-0 h1">
+            </i>Taller Mecánico - Registro de Recepción
+            </span>
+        </div>
+    </nav>
+
+    <div class="container mb-5">
+        <div class="row g-4">
+            <!-- Formulario de Registro -->
+            <div class="col-lg-5">
+                <div class="card shadow-sm border-0">
+                    <div class="card-header bg-custom py-3">
+                        <h5 class="card-title mb-0"></i>Nuevo Vehículo</h5>
+                    </div>
+                    <div class="card-body p-4">
+                        <form id="formRegistro" novalidate>
+                            <!-- Datos del Propietario -->
+                            <h6 class="text-muted fw-bold text-uppercase small mb-3">Datos del Cliente</h6>
+                            
+                            <div class="mb-3">
+                                <label for="cliente" class="form-label">Nombre del Cliente *</label>
+                                <input type="text" class="form-control" id="cliente" placeholder="Ej. Juan Pérez" required>
+                                <div class="invalid-feedback">Por favor ingresa el nombre del cliente.</div>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="telefono" class="form-label">Contacto</label>
+                                <input type="tel" class="form-control" id="telefono" placeholder="Ej. 449 123 4567">
+                            </div>
+
+                            <hr class="my-4">
+
+                            <!-- Datos del Vehículo -->
+                            <h6 class="text-muted fw-bold text-uppercase small mb-3">Datos del Vehículo</h6>
+
+                            <div class="row g-2 mb-3">
+                                <div class="col-md-7">
+                                    <label for="vehiculo" class="form-label">Marca y Modelo</label>
+                                    <input type="text" class="form-control" id="vehiculo" placeholder="Ej. Nissan Versa" required>
+                                    <div class="invalid-feedback">Ingresa la marca y modelo.</div>
+                                </div>
+                                <div class="col-md-5">
+                                    <label for="anio" class="form-label">Año</label>
+                                    <input type="number" class="form-control" id="anio" placeholder="2018" min="1950" max="2027">
+                                </div>
+                            </div>
+
+                            <div class="row g-2 mb-3">
+                                <div class="col-md-6">
+                                    <label for="placas" class="form-label">Placas</label>
+                                    <input type="text" class="form-control text-uppercase" id="placas" placeholder="ABC-123-D" required>
+                                    <div class="invalid-feedback">Ingresa las placas.</div>
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="kilometraje" class="form-label">Kilometraje</label>
+                                    <input type="number" class="form-control" id="kilometraje" placeholder="Ej. 85000">
+                                </div>
+                            </div>
+
+                            <!-- Problema Reportado -->
+                            <div class="mb-3">
+                                <label for="problema" class="form-label">Falla / Problema Reportado *</label>
+                                <textarea class="form-control" id="problema" rows="3" placeholder="Descripción detallada de la falla según el cliente..." required></textarea>
+                                <div class="invalid-feedback">Escribe el problema reportado.</div>
+                            </div>
+
+                            <div class="d-grid gap-2">
+                                <button type="submit" class="btn btn-custom btn-lg">
+                                    <i class="bi bi-save me-1"></i> Registrar Entrada
+                                </button>
+                                <button type="reset" class="btn btn-outline-secondary btn-sm">Limpiar Formulario</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tabla de Control de Autos Recibidos -->
+            <div class="col-lg-7">
+                <div class="card shadow-sm border-0">
+                    <div class="card-header bg-white py-3 d-flex justify-content-between align-items-center">
+                        <h5 class="card-title mb-0 text-dark">
+                            <i class="bi bi-clipboard2-check me-2"></i>Vehículos Recibidos en Taller
+                        </h5>
+                        <span id="contadorVehiculos" class="badge bg-secondary">0 vehículos</span>
+                    </div>
+                    <div class="card-body p-0">
+                        <div class="table-responsive">
+                            <table class="table table-hover align-middle mb-0">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th>Fecha / Folio</th>
+                                        <th>Vehículo / Placas</th>
+                                        <th>Cliente</th>
+                                        <th>Falla Reportada</th>
+                                        <th class="text-center">Acción</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tablaCuerpo">
+                                    <!-- Contenido dinámico -->
+                                </tbody>
+                            </table>
+                        </div>
+                        
+                        <div id="sinRegistros" class="p-4 text-center text-muted">
+                            <i class="bi bi-inbox fs-2 d-block mb-2"></i>
+                            No hay vehículos registrados en este momento.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap 5 JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Script Personalizado Externo -->
+    <script src="registra.js"></script>
+</body>
+</html>
