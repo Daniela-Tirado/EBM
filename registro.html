@@ -98,6 +98,10 @@
                         <h5 class="card-title mb-0 text-dark">
                             <i class="bi bi-clipboard2-check me-2"></i>Vehículos Recibidos en Taller
                         </h5>
+                        <div class="input-group" style="max-width: 280px;">
+                            <span class="input-group-text bg-light"><i class="bi bi-search"></i></span>
+                            <input type="text" id="inputBusqueda" class="form-control" placeholder="Buscar cliente o placa...">
+                        </div>
                         <span id="contadorVehiculos" class="badge bg-secondary">0 vehículos</span>
                     </div>
                     <div class="card-body p-0">
@@ -109,6 +113,7 @@
                                         <th>Vehículo / Placas</th>
                                         <th>Cliente</th>
                                         <th>Falla Reportada</th>
+                                        <th style="min-width: 160px;">Estado de la Orden</th>
                                         <th class="text-center">Acción</th>
                                     </tr>
                                 </thead>
