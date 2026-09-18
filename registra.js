@@ -4,8 +4,14 @@ const form = document.getElementById('formRegistro');
 const tablaCuerpo = document.getElementById('tablaCuerpo');
 const sinRegistros = document.getElementById('sinRegistros');
 const contadorVehiculos = document.getElementById('contadorVehiculos');
+const inputBusqueda = document.getElementById('inputBusqueda'); // NUEVO
 
 document.addEventListener('DOMContentLoaded', renderizarTabla);
+
+// NUEVO: Escucha el evento de escritura en la barra de búsqueda
+if (inputBusqueda) {
+    inputBusqueda.addEventListener('input', renderizarTabla);
+}
 
 form.addEventListener('submit', function(e) {
     e.preventDefault();
@@ -31,7 +37,8 @@ form.addEventListener('submit', function(e) {
         anio: document.getElementById('anio').value.trim() || 'N/A',
         placas: document.getElementById('placas').value.trim().toUpperCase(),
         kilometraje: document.getElementById('kilometraje').value.trim() ? `${document.getElementById('kilometraje').value} km` : 'N/A',
-        problema: document.getElementById('problema').value.trim()
+        problema: document.getElementById('problema').value.trim(),
+        estado: 'En revisión' // NUEVO: Estado por defecto al registrar
     };
 
     guardarRegistro(nuevoIngreso);
@@ -51,6 +58,19 @@ function guardarRegistro(item) {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(lista));
 }
 
+// NUEVO: Permite cambiar el estado de la orden en tiempo real
+function cambiarEstado(id, nuevoEstado) {
+    let lista = obtenerRegistros();
+    lista = lista.map(item => {
+        if (item.id === id) {
+            return { ...item, estado: nuevoEstado };
+        }
+        return item;
+    });
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(lista));
+    renderizarTabla();
+}
+
 function eliminarRegistro(id) {
     if (confirm('¿Deseas dar salida o eliminar este registro de recepción?')) {
         let lista = obtenerRegistros();
@@ -60,20 +80,47 @@ function eliminarRegistro(id) {
     }
 }
 
+// NUEVO: Retorna la clase CSS del color correspondiente según el estado
+function obtenerClaseEstado(estado) {
+    switch (estado) {
+        case 'En reparación':
+            return 'estado-reparacion';
+        case 'Listo':
+            return 'estado-listo';
+        case 'En revisión':
+        default:
+            return 'estado-revision';
+    }
+}
+
 function renderizarTabla() {
     const registros = obtenerRegistros();
+    
+    // NUEVO: Capturar texto de búsqueda y convertirlo a minúsculas
+    const textoBusqueda = inputBusqueda ? inputBusqueda.value.toLowerCase().trim() : '';
+
+    // NUEVO: Filtrar registros por nombre de cliente o placas
+    const registrosFiltrados = registros.filter(item => {
+        const clienteMatch = item.cliente.toLowerCase().includes(textoBusqueda);
+        const placasMatch = item.placas.toLowerCase().includes(textoBusqueda);
+        return clienteMatch || placasMatch;
+    });
+
     tablaCuerpo.innerHTML = '';
 
-    contadorVehiculos.textContent = `${registros.length} vehículo${registros.length === 1 ? '' : 's'}`;
+    contadorVehiculos.textContent = `${registrosFiltrados.length} de ${registros.length} vehículo${registros.length === 1 ? '' : 's'}`;
 
-    if (registros.length === 0) {
+    if (registrosFiltrados.length === 0) {
         sinRegistros.classList.remove('d-none');
         return;
     }
 
     sinRegistros.classList.add('d-none');
 
-    registros.forEach(item => {
+    registrosFiltrados.forEach(item => {
+        const estadoActual = item.estado || 'En revisión';
+        const claseColorEstado = obtenerClaseEstado(estadoActual);
+
         const tr = document.createElement('tr');
         tr.innerHTML = `
             <td>
@@ -89,9 +136,19 @@ function renderizarTabla() {
                 <small class="text-muted"><i class="bi bi-telephone"></i> ${item.telefono}</small>
             </td>
             <td>
-                <span class="d-inline-block text-truncate" style="max-width: 220px;" title="${item.problema}">
+                <span class="d-inline-block text-truncate" style="max-width: 170px;" title="${item.problema}">
                     ${item.problema}
                 </span>
+            </td>
+            <!-- NUEVO: Selector desplegable interactivo de estado -->
+            <td>
+                <select class="form-select form-select-sm select-estado ${claseColorEstado}" 
+                        onchange="cambiarEstado(${item.id}, this.value)"
+                        title="Cambiar estado de la orden">
+                    <option value="En revisión" ${estadoActual === 'En revisión' ? 'selected' : ''}>🟡 En revisión</option>
+                    <option value="En reparación" ${estadoActual === 'En reparación' ? 'selected' : ''}>🔵 En reparación</option>
+                    <option value="Listo" ${estadoActual === 'Listo' ? 'selected' : ''}>🟢 Listo</option>
+                </select>
             </td>
             <td class="text-center">
                 <button class="btn btn-outline-danger btn-sm" onclick="eliminarRegistro(${item.id})" title="Eliminar / Dar salida">
