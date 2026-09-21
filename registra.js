@@ -31,7 +31,8 @@ form.addEventListener('submit', function(e) {
         anio: document.getElementById('anio').value.trim() || 'N/A',
         placas: document.getElementById('placas').value.trim().toUpperCase(),
         kilometraje: document.getElementById('kilometraje').value.trim() ? `${document.getElementById('kilometraje').value} km` : 'N/A',
-        problema: document.getElementById('problema').value.trim()
+        problema: document.getElementById('problema').value.trim(),
+        estado: 'En revisión'
     };
 
     guardarRegistro(nuevoIngreso);
@@ -51,12 +52,36 @@ function guardarRegistro(item) {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(lista));
 }
 
+function cambiarEstado(id, nuevoEstado) {
+    let lista = obtenerRegistros();
+    lista = lista.map(item => {
+        if (item.id === id) {
+            return { ...item, estado: nuevoEstado };
+        }
+        return item;
+    });
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(lista));
+    renderizarTabla();
+}
+
 function eliminarRegistro(id) {
     if (confirm('¿Deseas dar salida o eliminar este registro de recepción?')) {
         let lista = obtenerRegistros();
         lista = lista.filter(item => item.id !== id);
         localStorage.setItem(STORAGE_KEY, JSON.stringify(lista));
         renderizarTabla();
+    }
+}
+
+function obtenerClaseEstado(estado) {
+    switch(estado) {
+        case 'En reparación':
+            return 'estado-reparacion';
+        case 'Listo':
+            return 'estado-listo';
+        case 'En revisión':
+        default:
+            return 'estado-revision';
     }
 }
 
@@ -74,6 +99,9 @@ function renderizarTabla() {
     sinRegistros.classList.add('d-none');
 
     registros.forEach(item => {
+        const estadoActual = item.estado || 'En revisión';
+        const claseColorEstado = obtenerClaseEstado(estadoActual);
+
         const tr = document.createElement('tr');
         tr.innerHTML = `
             <td>
@@ -89,9 +117,16 @@ function renderizarTabla() {
                 <small class="text-muted"><i class="bi bi-telephone"></i> ${item.telefono}</small>
             </td>
             <td>
-                <span class="d-inline-block text-truncate" style="max-width: 220px;" title="${item.problema}">
+                <span class="d-inline-block text-truncate" style="max-width: 180px;" title="${item.problema}">
                     ${item.problema}
                 </span>
+            </td>
+            <td>
+                <select class="form-select form-select-sm select-estado ${claseColorEstado}" onchange="cambiarEstado(${item.id}, this.value)">
+                    <option value="En revisión" ${estadoActual === 'En revisión' ? 'selected' : ''}>🟡 En revisión</option>
+                    <option value="En reparación" ${estadoActual === 'En reparación' ? 'selected' : ''}>🔵 En reparación</option>
+                    <option value="Listo" ${estadoActual === 'Listo' ? 'selected' : ''}>🟢 Listo</option>
+                </select>
             </td>
             <td class="text-center">
                 <button class="btn btn-outline-danger btn-sm" onclick="eliminarRegistro(${item.id})" title="Eliminar / Dar salida">

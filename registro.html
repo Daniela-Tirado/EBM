@@ -15,18 +15,18 @@
     <nav class="navbar navbar-dark bg-dark mb-4 shadow-sm">
         <div class="container">
             <span class="navbar-brand mb-0 h1">
-            </i>Taller Mecánico - Registro de Recepción
+                <i class="bi bi-wrench-adjustable me-2"></i>Taller Mecánico - Control de Órdenes
             </span>
         </div>
     </nav>
 
-    <div class="container mb-5">
+    <div class="container-fluid px-lg-5 mb-5">
         <div class="row g-4">
             <!-- Formulario de Registro -->
-            <div class="col-lg-5">
+            <div class="col-xl-4 col-lg-5">
                 <div class="card shadow-sm border-0">
                     <div class="card-header bg-custom py-3">
-                        <h5 class="card-title mb-0"></i>Nuevo Vehículo</h5>
+                        <h5 class="card-title mb-0"><i class="bi bi-car-front me-2"></i>Nuevo Vehículo</h5>
                     </div>
                     <div class="card-body p-4">
                         <form id="formRegistro" novalidate>
@@ -92,7 +92,7 @@
             </div>
 
             <!-- Tabla de Control de Autos Recibidos -->
-            <div class="col-lg-7">
+            <div class="col-xl-8 col-lg-7">
                 <div class="card shadow-sm border-0">
                     <div class="card-header bg-white py-3 d-flex justify-content-between align-items-center">
                         <h5 class="card-title mb-0 text-dark">
@@ -109,6 +109,7 @@
                                         <th>Vehículo / Placas</th>
                                         <th>Cliente</th>
                                         <th>Falla Reportada</th>
+                                        <th style="min-width: 170px;">Estado</th>
                                         <th class="text-center">Acción</th>
                                     </tr>
                                 </thead>
@@ -130,7 +131,6 @@
 
     <!-- Bootstrap 5 JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-    <!-- Script Personalizado Externo -->
     <script src="registra.js"></script>
 </body>
 </html>
