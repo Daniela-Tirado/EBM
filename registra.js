@@ -4,14 +4,14 @@ const form = document.getElementById('formRegistro');
 const tablaCuerpo = document.getElementById('tablaCuerpo');
 const sinRegistros = document.getElementById('sinRegistros');
 const contadorVehiculos = document.getElementById('contadorVehiculos');
-const inputBusqueda = document.getElementById('inputBusqueda'); // NUEVO
+const inputBusqueda = document.getElementById('inputBusqueda');
 
-document.addEventListener('DOMContentLoaded', renderizarTabla);
-
-// NUEVO: Escucha el evento de escritura en la barra de búsqueda
-if (inputBusqueda) {
-    inputBusqueda.addEventListener('input', renderizarTabla);
-}
+document.addEventListener('DOMContentLoaded', () => {
+    renderizarTabla();
+    if (inputBusqueda) {
+        inputBusqueda.addEventListener('input', renderizarTabla);
+    }
+});
 
 form.addEventListener('submit', function(e) {
     e.preventDefault();
@@ -38,7 +38,7 @@ form.addEventListener('submit', function(e) {
         placas: document.getElementById('placas').value.trim().toUpperCase(),
         kilometraje: document.getElementById('kilometraje').value.trim() ? `${document.getElementById('kilometraje').value} km` : 'N/A',
         problema: document.getElementById('problema').value.trim(),
-        estado: 'En revisión' // NUEVO: Estado por defecto al registrar
+        estado: 'En revisión'
     };
 
     guardarRegistro(nuevoIngreso);
@@ -58,7 +58,6 @@ function guardarRegistro(item) {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(lista));
 }
 
-// NUEVO: Permite cambiar el estado de la orden en tiempo real
 function cambiarEstado(id, nuevoEstado) {
     let lista = obtenerRegistros();
     lista = lista.map(item => {
@@ -80,9 +79,8 @@ function eliminarRegistro(id) {
     }
 }
 
-// NUEVO: Retorna la clase CSS del color correspondiente según el estado
 function obtenerClaseEstado(estado) {
-    switch (estado) {
+    switch(estado) {
         case 'En reparación':
             return 'estado-reparacion';
         case 'Listo':
@@ -95,11 +93,8 @@ function obtenerClaseEstado(estado) {
 
 function renderizarTabla() {
     const registros = obtenerRegistros();
-    
-    // NUEVO: Capturar texto de búsqueda y convertirlo a minúsculas
     const textoBusqueda = inputBusqueda ? inputBusqueda.value.toLowerCase().trim() : '';
 
-    // NUEVO: Filtrar registros por nombre de cliente o placas
     const registrosFiltrados = registros.filter(item => {
         const clienteMatch = item.cliente.toLowerCase().includes(textoBusqueda);
         const placasMatch = item.placas.toLowerCase().includes(textoBusqueda);
@@ -108,7 +103,7 @@ function renderizarTabla() {
 
     tablaCuerpo.innerHTML = '';
 
-    contadorVehiculos.textContent = `${registrosFiltrados.length} de ${registros.length} vehículo${registros.length === 1 ? '' : 's'}`;
+    contadorVehiculos.textContent = `${registrosFiltrados.length} vehículo${registrosFiltrados.length === 1 ? '' : 's'}`;
 
     if (registrosFiltrados.length === 0) {
         sinRegistros.classList.remove('d-none');
@@ -136,15 +131,12 @@ function renderizarTabla() {
                 <small class="text-muted"><i class="bi bi-telephone"></i> ${item.telefono}</small>
             </td>
             <td>
-                <span class="d-inline-block text-truncate" style="max-width: 170px;" title="${item.problema}">
+                <span class="d-inline-block text-truncate" style="max-width: 180px;" title="${item.problema}">
                     ${item.problema}
                 </span>
             </td>
-            <!-- NUEVO: Selector desplegable interactivo de estado -->
             <td>
-                <select class="form-select form-select-sm select-estado ${claseColorEstado}" 
-                        onchange="cambiarEstado(${item.id}, this.value)"
-                        title="Cambiar estado de la orden">
+                <select class="form-select form-select-sm select-estado ${claseColorEstado}" onchange="cambiarEstado(${item.id}, this.value)">
                     <option value="En revisión" ${estadoActual === 'En revisión' ? 'selected' : ''}>🟡 En revisión</option>
                     <option value="En reparación" ${estadoActual === 'En reparación' ? 'selected' : ''}>🔵 En reparación</option>
                     <option value="Listo" ${estadoActual === 'Listo' ? 'selected' : ''}>🟢 Listo</option>
