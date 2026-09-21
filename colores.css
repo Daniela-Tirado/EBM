@@ -1,0 +1,43 @@
+/* Estilos personalizados con el color #057050 */
+.bg-custom {
+    background-color: #057050 !important;
+    color: #ffffff !important;
+}
+.btn-custom {
+    background-color: #057050;
+    border-color: #057050;
+    color: #ffffff;
+}
+.btn-custom:hover, .btn-custom:focus, .btn-custom:active {
+    background-color: #045a40;
+    border-color: #045a40;
+    color: #ffffff;
+}
+.text-custom {
+    color: #057050 !important;
+}
+
+/* Badges y estilos de estados del taller */
+.estado-revision {
+    background-color: #fff3cd !important;
+    color: #664d03 !important;
+    border-color: #ffe69c !important;
+}
+
+.estado-reparacion {
+    background-color: #cff4fc !important;
+    color: #055160 !important;
+    border-color: #b6effb !important;
+}
+
+.estado-listo {
+    background-color: #d1e7dd !important;
+    color: #0f5132 !important;
+    border-color: #badbcc !important;
+}
+
+.select-estado {
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+}
